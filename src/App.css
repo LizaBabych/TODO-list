@@ -64,6 +64,11 @@
   text-decoration: line-through;
 }
 
+.new-line {
+  display: flex;
+  margin: 0 30%
+}
+
 .unchecked {
   text-decoration: none;
 }
