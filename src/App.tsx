@@ -1,18 +1,30 @@
-import React from 'react';
+import React from "react";
 import Header from "./components/Header";
 import TodoForm from "./components/TodoForm";
 import { createStore } from "redux";
-// import { Provider } from "react-redux"
-import './App.css';
-// const store = createStore();
+import { connect, Provider } from "react-redux";
+import "./App.css";
+
+const initialState = {
+  name: "a",
+  age: 15,
+};
+
+const rootReducer = (state = initialState, action: any) => {
+  return state;
+};
+
+const store = createStore(rootReducer);
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Header />
-      <TodoForm />
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <Header />
+        <TodoForm />
+      </div>
+    </Provider>
   );
-}
+};
 
 export default App;

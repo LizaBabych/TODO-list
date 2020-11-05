@@ -1,43 +1,59 @@
-import React, {useState} from "react"
-import Todo from "./Todo"
+import React, {useState} from "react";
+import Todo from "./Todo";
 
-export interface ITodo {
+interface ITodo {
   name: string,
   checked: boolean,
   id: number,
 }
 
-type stateTodo = 'all' | 'done' | 'active';
+type stateTodo = 'all' | 'done' | 'active' | 'searchTodo';
 
 const TodoForm: React.FC = () => {
 
   const [todos, setTodos] = useState<ITodo[]>([]);
-  const [stateTodo, setStateTodo] = useState<stateTodo>('all');
+  const [searchTodo, setSearchTodo] = useState<string>("");
+  const [stateTodo, setStateTodo] = useState<stateTodo>("all");
   const [todo, setTodo] = useState<ITodo>({
-    name: '',
+    name: "",
     checked: false,
     id: 0,
   });
 
   const clickHandler = () => {
-    if (todo.name !== '') {
+    if (todo.name !== "") {
       todos.push(todo);
-      setTodo({...todo, name: '', id: todo.id + 1});
+      setTodo({...todo, name: "", id: todo.id + 1});
     }
-  }
+  };
 
   const setChecked = (myTodo: ITodo) => {
     todos.push({...myTodo, checked: !myTodo.checked});
-    setTodos(todos.filter((n) => {return n !== myTodo}));
-    console.log(todos);
-  }
+    setTodos(todos.filter((n) => {return n !== myTodo;}));
+  };
 
   const deleteTodo = (myTodo: ITodo) => {
-    setTodos(todos.filter((n) => {return n !== myTodo}));
-  }
+    setTodos(todos.filter((n) => {return n !== myTodo;}));
+  };
+
+  const sendForm = (e: any) => {
+    e.preventDefault();
+    console.log(searchTodo);
+    setStateTodo("searchTodo");
+  };
 
   return (
     <>
+      <form className="form-inline form" onSubmit={sendForm}>
+        <input
+          value={searchTodo}
+          className="form-control mr-sm-2"
+          type="text"
+          placeholder="Введите..."
+          onChange={(e) => setSearchTodo(e.target.value)}
+          />
+        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+      </form>
       <div className="todo-form">
         <input
           value={todo.name}
@@ -58,12 +74,12 @@ const TodoForm: React.FC = () => {
           {stateTodo}
         </button>
         <div className="dropdown-menu">
-          <span className="dropdown-item" onClick={() => setStateTodo('all')}>Все</span>
-          <span className="dropdown-item" onClick={() => setStateTodo('active')}>Активные</span>
-          <span className="dropdown-item" onClick={() => setStateTodo('done')}>Выпоненые</span>
+          <span className="dropdown-item" onClick={() => setStateTodo("all")}>Все</span>
+          <span className="dropdown-item" onClick={() => setStateTodo("active")}>Активные</span>
+          <span className="dropdown-item" onClick={() => setStateTodo("done")}>Выпоненые</span>
         </div>
       </div>
-      {stateTodo === 'all' ? (
+      {stateTodo === "all" ? (
         <div className="todos">
           {todos.map((myTodo) =>
             <Todo
@@ -73,11 +89,10 @@ const TodoForm: React.FC = () => {
               deleteTodo={() => deleteTodo(myTodo)}/>
           )}
         </div>
-      ) : (stateTodo === 'active') ? (
+      ) : (stateTodo === "active") ? (
         <div className="todos">
           {todos.map((myTodo) =>
-            <div
-            key={myTodo.id}>
+            <div key={myTodo.id}>
               {myTodo.checked === false &&
               <Todo
                 todo={myTodo}
@@ -87,11 +102,10 @@ const TodoForm: React.FC = () => {
             </div>
            )}
          </div>
-      ) : (
+      ) : (stateTodo === "done") ? (
         <div className="todos">
           {todos.map((myTodo) =>
-            <div
-            key={myTodo.id}>
+            <div key={myTodo.id}>
               {myTodo.checked === true &&
               <Todo
                 todo={myTodo}
@@ -101,9 +115,23 @@ const TodoForm: React.FC = () => {
             </div>
           )}
         </div>
-      )}
+      ) : (
+        <div className="todos">
+          {todos.map((myTodo) =>
+            <div key={myTodo.id}>
+              {myTodo.name === searchTodo &&
+              <Todo
+                todo={myTodo}
+                setChecked={() => setChecked(myTodo)}
+                deleteTodo={() => deleteTodo(myTodo)}/>
+              }
+            </div>
+          )}
+        </div>
+      )
+    }
     </>
   );
-}
+};
 
 export default TodoForm;

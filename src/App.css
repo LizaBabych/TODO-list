@@ -39,8 +39,11 @@
 
 .todo-form {
   display: flex;
-  margin: 5% 30% 0 30%;
-  padding-top: 60px;
+  margin: 30px 30% 0 30%;
+}
+
+.form {
+  margin: 10% 30% 0 30%;
 }
 
 .todos {

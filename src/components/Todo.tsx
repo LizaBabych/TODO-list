@@ -1,13 +1,13 @@
-import React from "react"
+import React from "react";
 
-const Todo = (props) => {
+const Todo = (props: any) => {
 
   return (
     <div className="list-group mb-2">
       <div className="list-group-item list-group-item-action list-group-item-secondary center">
         <div className="element-row">
           <div className="check-box mr-1">
-            <input type="checkbox" checked={props.todo.checked && "checked "} onChange={props.setChecked}/>
+            <input type="checkbox" checked={props.todo.checked} onChange={props.setChecked}/>
           </div>
           <p className={props.todo.checked ? "checked " : "unchecked "}>{props.todo.name}</p>
         </div>
@@ -17,6 +17,6 @@ const Todo = (props) => {
       </div>
     </div>
   );
-}
+};
 
 export default Todo;

@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 const Header: React.FC = () => {
   return (
@@ -6,6 +6,6 @@ const Header: React.FC = () => {
       <span className="navbar-brand">Todo-list</span>
     </nav>
   );
-}
+};
 
 export default Header;
