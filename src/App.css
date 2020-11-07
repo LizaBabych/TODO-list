@@ -46,6 +46,10 @@
   margin: 10% 30% 0 30%;
 }
 
+.dropdown-menu .dropdown-item:hover {
+  cursor: pointer;
+}
+
 .todos {
   display: flex;
   flex-direction: column;

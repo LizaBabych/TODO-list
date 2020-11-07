@@ -1,45 +1,40 @@
 import React, {useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Todo from "./Todo";
+import {ITodo} from "../types";
+import {TStateTodo} from "../types";
 
-interface ITodo {
-  name: string,
-  checked: boolean,
-  id: number,
-}
-
-type stateTodo = 'all' | 'done' | 'active' | 'searchTodo';
+import {setTodos} from "../store/actions/todosActions";
+import setSearchTodo from "../store/actions/searchTodoActions";
+import setStateTodo from "../store/actions/stateTodoActions";
+import rootReducer from "../store/reducers";
 
 const TodoForm: React.FC = () => {
 
-  const [todos, setTodos] = useState<ITodo[]>([]);
-  const [searchTodo, setSearchTodo] = useState<string>("");
-  const [stateTodo, setStateTodo] = useState<stateTodo>("all");
-  const [todo, setTodo] = useState<ITodo>({
-    name: "",
-    checked: false,
-    id: 0,
-  });
+  const dispatch = useDispatch();
+
+  const todos = useSelector((state: any) => state.todosReducer.todos);
+  const stateTodo = useSelector((state: any) => state.stateTodoReducer.stateTodo);
+  const searchTodo = useSelector((state: any) => state.searchTodoReducer.search);
+
+  const setMyTodos = (todo: ITodo) => { dispatch(setTodos(todo)); };
+  const setStateMyTodo = (state: TStateTodo) => { dispatch(setStateTodo(state)); };
+  const setSearchMyTodo = (search: string) => { dispatch(setSearchTodo(search)); };
+
+  const [searchName, setSearchName] = useState<string>("");
+  const [todoName, setTodoName] = useState<string>("");
 
   const clickHandler = () => {
-    if (todo.name !== "") {
-      todos.push(todo);
-      setTodo({...todo, name: "", id: todo.id + 1});
+    if (todoName !== "") {
+      setMyTodos({name: todoName, checked: false, id: 0});
+      setTodoName("");
+      setStateMyTodo("all");
     }
-  };
-
-  const setChecked = (myTodo: ITodo) => {
-    todos.push({...myTodo, checked: !myTodo.checked});
-    setTodos(todos.filter((n) => {return n !== myTodo;}));
-  };
-
-  const deleteTodo = (myTodo: ITodo) => {
-    setTodos(todos.filter((n) => {return n !== myTodo;}));
   };
 
   const sendForm = (e: any) => {
     e.preventDefault();
-    console.log(searchTodo);
-    setStateTodo("searchTodo");
+    setStateMyTodo("search");
   };
 
   return (
@@ -50,21 +45,18 @@ const TodoForm: React.FC = () => {
           className="form-control mr-sm-2"
           type="text"
           placeholder="Введите..."
-          onChange={(e) => setSearchTodo(e.target.value)}
+          onChange={(e) => setSearchMyTodo(e.target.value)}
           />
         <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
       </form>
       <div className="todo-form">
         <input
-          value={todo.name}
-          onChange={(e) => setTodo({...todo, name: e.target.value})}
+          value={todoName}
+          onChange={(e) => setTodoName(e.target.value)}
           className="form-control"
           type="text"
           placeholder="Введите название..." />
-        <button
-          className="btn btn-success"
-          onClick={() => clickHandler()}
-        >Добавить</button>
+        <button className="btn btn-success" onClick={() => clickHandler()}>Добавить</button>
       </div>
       <div className="dropdown new-line">
         <button
@@ -74,57 +66,38 @@ const TodoForm: React.FC = () => {
           {stateTodo}
         </button>
         <div className="dropdown-menu">
-          <span className="dropdown-item" onClick={() => setStateTodo("all")}>Все</span>
-          <span className="dropdown-item" onClick={() => setStateTodo("active")}>Активные</span>
-          <span className="dropdown-item" onClick={() => setStateTodo("done")}>Выпоненые</span>
+          <span className="dropdown-item" onClick={() => setStateMyTodo("all")}>Все</span>
+          <span className="dropdown-item" onClick={() => setStateMyTodo("active")}>Активные</span>
+          <span className="dropdown-item" onClick={() => setStateMyTodo("done")}>Выпоненые</span>
         </div>
       </div>
       {stateTodo === "all" ? (
         <div className="todos">
-          {todos.map((myTodo) =>
-            <Todo
-              todo={myTodo}
-              key={myTodo.id}
-              setChecked={() => setChecked(myTodo)}
-              deleteTodo={() => deleteTodo(myTodo)}/>
+          {todos.map((myTodo: ITodo) =>
+            <Todo todo={myTodo} key={myTodo.id}/>
           )}
         </div>
       ) : (stateTodo === "active") ? (
         <div className="todos">
-          {todos.map((myTodo) =>
+          {todos.map((myTodo: ITodo) =>
             <div key={myTodo.id}>
-              {myTodo.checked === false &&
-              <Todo
-                todo={myTodo}
-                setChecked={() => setChecked(myTodo)}
-                deleteTodo={() => deleteTodo(myTodo)}/>
-              }
+            {myTodo.checked === false && <Todo todo={myTodo}/> }
             </div>
-           )}
-         </div>
+          )}
+        </div>
       ) : (stateTodo === "done") ? (
         <div className="todos">
-          {todos.map((myTodo) =>
+          {todos.map((myTodo: ITodo) =>
             <div key={myTodo.id}>
-              {myTodo.checked === true &&
-              <Todo
-                todo={myTodo}
-                setChecked={() => setChecked(myTodo)}
-                deleteTodo={() => deleteTodo(myTodo)}/>
-              }
+            {myTodo.checked === true && <Todo todo={myTodo}/> }
             </div>
           )}
         </div>
       ) : (
         <div className="todos">
-          {todos.map((myTodo) =>
+          {todos.map((myTodo: ITodo) =>
             <div key={myTodo.id}>
-              {myTodo.name === searchTodo &&
-              <Todo
-                todo={myTodo}
-                setChecked={() => setChecked(myTodo)}
-                deleteTodo={() => deleteTodo(myTodo)}/>
-              }
+            {myTodo.name === searchTodo && <Todo todo={myTodo}/> }
             </div>
           )}
         </div>
@@ -133,5 +106,6 @@ const TodoForm: React.FC = () => {
     </>
   );
 };
+
 
 export default TodoForm;
