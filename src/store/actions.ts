@@ -1,8 +1,8 @@
-import {ITodo} from "../../types";
+import { ITodo } from "../types";
 
 export const setTodos = (todo: ITodo) => {
   return {
-    type: "SET_TODOS",
+    type: "SET_TODO",
     payload: todo,
   };
 };

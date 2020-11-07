@@ -1,27 +1,31 @@
 import React from "react";
-import {ITodo} from "../types";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteTodo, setChecked } from "../store/actions/todosActions";
+import { ITodo } from "../types";
+import { ITodoComponent } from "../types";
 
-const Todo = (props: any) => {
+import { useDispatch } from "react-redux";
+import { deleteTodo, setChecked } from "../store/actions";
+
+const Todo: React.FC<ITodoComponent> = (props) => {
 
   const dispatch = useDispatch();
   const deleteMyTodo = (todo: ITodo) => { dispatch(deleteTodo(todo)); };
   const setCheckedTodo = (todo: ITodo) => { dispatch(setChecked(todo)); };
 
   return (
-    <div className="list-group mb-2">
-      <div className="list-group-item list-group-item-action list-group-item-secondary center">
-        <div className="element-row">
-          <div className="check-box mr-1">
-            <input type="checkbox" checked={props.todo.checked} onChange={() => setCheckedTodo(props.todo)}/>
-          </div>
-          <p className={props.todo.checked ? "checked " : "unchecked "}>{props.todo.name}</p>
-        </div>
-        <button className="btn btn-sm btn-danger" onClick={() => deleteMyTodo(props.todo)}>
-          <i className="fas fa-trash-alt" />
-        </button>
+    <div className="list list-group-item-action list-group-item-secondary center"
+      onClick={() => setCheckedTodo(props.todo)}>
+      <div className="element-row ml-1">
+        {(props.todo.checked) ? (
+            <i className="show mt-1 fas fa-check" />
+          ) : ( <i className="hide mt-1 fas fa-check" />
+        )}
+        <p className={props.todo.checked ? "checked ml-1 " : "unchecked ml-1 "}>
+          {props.todo.name}
+        </p>
       </div>
+      <button className="btn btn-sm" onClick={() => deleteMyTodo(props.todo)}>
+        <i className="fas fa-times" />
+      </button>
     </div>
   );
 };
