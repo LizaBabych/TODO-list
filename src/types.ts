@@ -1,6 +1,6 @@
 export const SET_TODO: TAction = "SET_TODO";
 export const SET_CHECKED: TAction = "SET_CHECKED";
-export const DELETE_TODO = "DELETE_TODO";
+export const DELETE_TODO: TAction = "DELETE_TODO";
 
 export interface ITodo {
   title: string,
