@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import "../style/todo.css";
 import { ITodo, ITodoComponent } from "../types";
-import { deleteTodo, setChecked } from "../store/actions";
+import { deleteTodo, setChecked } from "../store/actions/todoActions";
 
 const Todo: React.FC<ITodoComponent> = (props) => {
 
   const dispatch = useDispatch();
+
   const deleteMyTodo = (todo: ITodo) => { dispatch(deleteTodo(todo)); };
   const setCheckedTodo = (todo: ITodo) => { dispatch(setChecked(todo)); };
 

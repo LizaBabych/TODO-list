@@ -1,10 +1,10 @@
-import { IInitialState, IAction } from "../types";
+import { IInitialTodos, ITodoAction } from "../../types";
 
-const initialState: IInitialState = { todos: [] };
+const initialState: IInitialTodos = { todos: [] };
 
 let counter: number = 0;
 
-const reducer = (state = initialState, action: IAction): IInitialState => {
+const todoReducer = (state = initialState, action: ITodoAction): IInitialTodos => {
   switch (action.type) {
     case "SET_TODO":
        return {...state, todos: state?.todos?.concat({...action.payload, id: counter++})};
@@ -26,4 +26,4 @@ const reducer = (state = initialState, action: IAction): IInitialState => {
   }
 };
 
-export default reducer;
+export default todoReducer;

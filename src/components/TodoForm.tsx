@@ -1,50 +1,37 @@
 import React, { useState } from "react";
-import Todo from "./Todo";
 import { useDispatch, useSelector } from "react-redux";
+import Search from "./Search";
+import SortingTodo from "./SortingTodo";
 import "../style/todo.css";
-import { ITodo, IInitialState, TStateTodo } from "../types";
-import { setTodos } from "../store/actions";
-import reducer from "../store/reducers";
+import { ITodo, TStateTodo, IRootReducer } from "../types";
+import { setTodos } from "../store/actions/todoActions";
+import { setState } from "../store/actions/stateActions";
 
 const TodoForm: React.FC = () => {
 
-  const todos = useSelector((todos: IInitialState) => todos.todos);
-  const dispatch = useDispatch();
-  const setMyTodos = (todo: ITodo) => { dispatch(setTodos(todo)); };
+  const todos = useSelector((state: IRootReducer) => state.todoReducer.todos);
+  const state = useSelector((state: IRootReducer) => state.stateReducer.state);
 
-  const [stateTodo, setStateTodo] = useState<TStateTodo>("all");
-  const [filter, setFilter] = useState<string>("");
+  const dispatch = useDispatch();
+
+  const setMyTodos = (todo: ITodo) => { dispatch(setTodos(todo)); };
+  const setTodoState = (state: TStateTodo) => { dispatch(setState(state)); };
+
   const [todo, setTodo] = useState<ITodo>({title: "", checked: false, id: 0});
 
   const clickHandler = (): void => {
     if (todo.title !== "") {
       setMyTodos(todo);
       setTodo({...todo, title: ""});
-      setStateTodo("all");
-      setFilter("");
+      setTodoState("all");
     }
-  };
-
-  const sendForm = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    if (filter !== "") {
-      setStateTodo("search");
-    } else setStateTodo("all");
   };
 
   return (
     <div className="wrapper">
       <div className="wrapper-list">
         <p className="todo-name">Todo-List</p>
-        <form className="form-inline form" onSubmit={sendForm}>
-          <input
-            value={filter}
-            className="form-control mr-sm-2"
-            type="text"
-            placeholder="Поиск..."
-            onChange={(e) => setFilter(e.target.value)}
-            />
-        </form>
+        <Search />
       </div>
       <div className="todo-form mt-2">
       <div className="dropdown new-line">
@@ -52,12 +39,12 @@ const TodoForm: React.FC = () => {
           className="btn dropdown-toggle"
           type="button"
           data-toggle="dropdown">
-          {stateTodo}
+          {state}
         </button>
         <div className="dropdown-menu">
-          <span className="dropdown-item" onClick={() => {setStateTodo("all"); setFilter("");}}>Все</span>
-          <span className="dropdown-item" onClick={() => {setStateTodo("active"); setFilter("");}}>Активные</span>
-          <span className="dropdown-item" onClick={() => {setStateTodo("done"); setFilter("");}}>Выпоненые</span>
+          <span className="dropdown-item" onClick={() => setTodoState("all")}>Все</span>
+          <span className="dropdown-item" onClick={() => setTodoState("active")}>Активные</span>
+          <span className="dropdown-item" onClick={() => setTodoState("done")}>Выпоненые</span>
         </div>
       </div>
         <input
@@ -68,38 +55,7 @@ const TodoForm: React.FC = () => {
           onKeyPress={(e) => {if (e.key === "Enter") clickHandler();}}
           placeholder="Введите название..." />
       </div>
-      {stateTodo === "all" ? (
-        <div className="todos">
-          {todos.map((myTodo: ITodo) =>
-            <Todo todo={myTodo} key={myTodo.id}/>
-          )}
-        </div>
-      ) : (stateTodo === "active") ? (
-        <div className="todos">
-          {todos.map((myTodo: ITodo) =>
-            <div key={myTodo.id}>
-              {myTodo.checked === false && <Todo todo={myTodo}/> }
-            </div>
-          )}
-        </div>
-      ) : (stateTodo === "done") ? (
-        <div className="todos">
-          {todos.map((myTodo: ITodo) =>
-            <div key={myTodo.id}>
-              {myTodo.checked === true && <Todo todo={myTodo}/> }
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="todos">
-          {todos.map((myTodo: ITodo) =>
-            <div key={myTodo.id}>
-              {myTodo.title === filter && <Todo todo={myTodo}/> }
-            </div>
-          )}
-        </div>
-      )
-    }
+      <SortingTodo />
     </div>
   );
 };
