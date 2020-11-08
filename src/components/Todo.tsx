@@ -1,4 +1,5 @@
 import React from "react";
+import "../style/todo.css";
 import { ITodo } from "../types";
 import { ITodoComponent } from "../types";
 
@@ -12,7 +13,8 @@ const Todo: React.FC<ITodoComponent> = (props) => {
   const setCheckedTodo = (todo: ITodo) => { dispatch(setChecked(todo)); };
 
   return (
-    <div className="list list-group-item-action list-group-item-secondary center"
+    <div className={"list list-group-item-action list-group-item-secondary center " +
+        (props.todo.checked ? "checked-todo " : "")}
       onClick={() => setCheckedTodo(props.todo)}>
       <div className="element-row ml-1">
         {(props.todo.checked) ? (
@@ -20,7 +22,7 @@ const Todo: React.FC<ITodoComponent> = (props) => {
           ) : ( <i className="hide mt-1 fas fa-check" />
         )}
         <p className={props.todo.checked ? "checked ml-1 " : "unchecked ml-1 "}>
-          {props.todo.name}
+          {props.todo.title}
         </p>
       </div>
       <button className="btn btn-sm" onClick={() => deleteMyTodo(props.todo)}>

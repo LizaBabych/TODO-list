@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import "../style/todo.css";
 import Todo from "./Todo";
 import { ITodo } from "../types";
+import { IInitialState } from "../types";
 import { TStateTodo } from "../types";
 
 import { setTodos } from "../store/actions";
@@ -11,40 +13,40 @@ const TodoForm: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const todos = useSelector((state: any) => state.todos);             // any
+  const todos = useSelector((todos: IInitialState) => todos.todos);
   const setMyTodos = (todo: ITodo) => { dispatch(setTodos(todo)); };
 
-  const [searchName, setSearchName] = useState<string>("");           // Не Name,а туду!!!!
   const [stateTodo, setStateTodo] = useState<TStateTodo>("all");
-  const [search, setSearch] = useState<string>("");
-  const [todoName, setTodoName] = useState<string>("");
+  const [filter, setFilter] = useState<string>("");
+  const [todo, setTodo] = useState<ITodo>({title: "", checked: false, id: 0});
 
-  const clickHandler = () => {
-    if (todoName !== "") {
-      setMyTodos({name: todoName, checked: false, id: 0});
-      setTodoName("");
+  const clickHandler = (): void => {
+    if (todo.title !== "") {
+      setMyTodos(todo);
+      setTodo({...todo, title: ""});
       setStateTodo("all");
+      setFilter("");
     }
   };
 
-  const sendForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const sendForm = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (search !== "") {
+    if (filter !== "") {
       setStateTodo("search");
     }
   };
 
   return (
-    <>
+    <div className="wrapper">
       <div className="wrapper-list">
         <p className="todo-name">Todo-List</p>
         <form className="form-inline form" onSubmit={sendForm}>
           <input
-            value={search}
+            value={filter}
             className="form-control mr-sm-2"
             type="text"
             placeholder="Поиск..."
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setFilter(e.target.value)}
             />
         </form>
       </div>
@@ -57,20 +59,18 @@ const TodoForm: React.FC = () => {
           {stateTodo}
         </button>
         <div className="dropdown-menu">
-          <span className="dropdown-item" onClick={() => setStateTodo("all")}>Все</span>
-          <span className="dropdown-item" onClick={() => setStateTodo("active")}>Активные</span>
-          <span className="dropdown-item" onClick={() => setStateTodo("done")}>Выпоненые</span>
+          <span className="dropdown-item" onClick={() => {setStateTodo("all"); setFilter("");}}>Все</span>
+          <span className="dropdown-item" onClick={() => {setStateTodo("active"); setFilter("");}}>Активные</span>
+          <span className="dropdown-item" onClick={() => {setStateTodo("done"); setFilter("");}}>Выпоненые</span>
         </div>
       </div>
         <input
-          value={todoName}
-          onChange={(e) => setTodoName(e.target.value)}
+          value={todo.title}
+          onChange={(e) => setTodo({...todo, title: e.target.value})}
           className="form-control"
           type="text"
           onKeyPress={(e) => {if (e.key === "Enter") clickHandler();}}
           placeholder="Введите название..." />
-          <i className="click-add fas fa-plus" onClick={() => clickHandler()}/>
-
       </div>
       {stateTodo === "all" ? (
         <div className="todos">
@@ -98,13 +98,13 @@ const TodoForm: React.FC = () => {
         <div className="todos">
           {todos.map((myTodo: ITodo) =>
             <div key={myTodo.id}>
-              {myTodo.name === search && <Todo todo={myTodo}/> }
+              {myTodo.title === filter && <Todo todo={myTodo}/> }
             </div>
           )}
         </div>
       )
     }
-    </>
+    </div>
   );
 };
 

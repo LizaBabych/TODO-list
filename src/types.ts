@@ -1,12 +1,15 @@
+export const SET_TODO: TAction = "SET_TODO";
+export const SET_CHECKED: TAction = "SET_CHECKED";
+export const DELETE_TODO = "DELETE_TODO";
+
 export interface ITodo {
-  name: string,
+  title: string,
   checked: boolean,
   id: number,
 }
 
 export interface IInitialState {
-  todos?: ITodo[],
-  todo?: ITodo,
+  todos: ITodo[],
 }
 
 export interface ITodoComponent {
@@ -15,11 +18,9 @@ export interface ITodoComponent {
 
 export interface IAction {
   type: TAction,
-  payload: Tpayload,
+  payload: ITodo,
 }
 
 export type TStateTodo = 'all' | 'done' | 'active' | 'search';
 
 export type TAction = 'SET_TODO' | 'SET_CHECKED' | 'DELETE_TODO';
-
-export type Tpayload = ITodo | TStateTodo | string;

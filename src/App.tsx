@@ -1,6 +1,6 @@
 import React from "react";
 import TodoForm from "./components/TodoForm";
-import "./App.css";
+import "./style/App.css";
 
 const App: React.FC = () => {
   return (
