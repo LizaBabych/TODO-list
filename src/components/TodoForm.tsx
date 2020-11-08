@@ -1,19 +1,15 @@
 import React, { useState } from "react";
+import Todo from "./Todo";
 import { useDispatch, useSelector } from "react-redux";
 import "../style/todo.css";
-import Todo from "./Todo";
-import { ITodo } from "../types";
-import { IInitialState } from "../types";
-import { TStateTodo } from "../types";
-
+import { ITodo, IInitialState, TStateTodo } from "../types";
 import { setTodos } from "../store/actions";
 import reducer from "../store/reducers";
 
 const TodoForm: React.FC = () => {
 
-  const dispatch = useDispatch();
-
   const todos = useSelector((todos: IInitialState) => todos.todos);
+  const dispatch = useDispatch();
   const setMyTodos = (todo: ITodo) => { dispatch(setTodos(todo)); };
 
   const [stateTodo, setStateTodo] = useState<TStateTodo>("all");
@@ -33,7 +29,7 @@ const TodoForm: React.FC = () => {
     e.preventDefault();
     if (filter !== "") {
       setStateTodo("search");
-    }
+    } else setStateTodo("all");
   };
 
   return (

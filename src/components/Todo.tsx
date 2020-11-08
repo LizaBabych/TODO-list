@@ -1,9 +1,7 @@
 import React from "react";
-import "../style/todo.css";
-import { ITodo } from "../types";
-import { ITodoComponent } from "../types";
-
 import { useDispatch } from "react-redux";
+import "../style/todo.css";
+import { ITodo, ITodoComponent } from "../types";
 import { deleteTodo, setChecked } from "../store/actions";
 
 const Todo: React.FC<ITodoComponent> = (props) => {
@@ -13,15 +11,16 @@ const Todo: React.FC<ITodoComponent> = (props) => {
   const setCheckedTodo = (todo: ITodo) => { dispatch(setChecked(todo)); };
 
   return (
-    <div className={"list list-group-item-action list-group-item-secondary center " +
-        (props.todo.checked ? "checked-todo " : "")}
+    <div
+      className={"list list-group-item-action center " +
+      (props.todo.checked ? "checked-todo " : "")}
       onClick={() => setCheckedTodo(props.todo)}>
-      <div className="element-row ml-1">
+      <div className="element-row ml-1 mt-1">
         {(props.todo.checked) ? (
             <i className="show mt-1 fas fa-check" />
           ) : ( <i className="hide mt-1 fas fa-check" />
         )}
-        <p className={props.todo.checked ? "checked ml-1 " : "unchecked ml-1 "}>
+        <p className={props.todo.checked ? "checked ml-2 " : "unchecked ml-2 "}>
           {props.todo.title}
         </p>
       </div>

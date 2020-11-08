@@ -1,5 +1,4 @@
-import { IInitialState } from "../types";
-import { IAction } from "../types";
+import { IInitialState, IAction } from "../types";
 
 const initialState: IInitialState = { todos: [] };
 
