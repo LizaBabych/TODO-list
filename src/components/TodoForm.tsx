@@ -30,7 +30,7 @@ const TodoForm: React.FC = () => {
   return (
     <div className="wrapper">
       <div className="wrapper-list">
-        <p className="todo-name">Todo-List</p>
+        <h1 className="todo-name">Todo-List</h1>
         <Search />
       </div>
       <div className="todo-form mt-2">

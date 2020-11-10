@@ -15,9 +15,7 @@ const Search: React.FC = () => {
 
   const sendForm = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (search !== "") {
-      setTodoState("search");
-    } else setTodoState("all");
+    (search !== "") ? setTodoState("search") : setTodoState("all");
   };
 
   return (
